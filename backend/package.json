@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon",
-    "production": "pm2 start index.js --name knowledge-backend"
+    "production": "pm2 start index.js --name knowledge-backend",
+    "knex-create": "knex migrate:make create_table_articles"
   },
   "keywords": [],
   "author": "",

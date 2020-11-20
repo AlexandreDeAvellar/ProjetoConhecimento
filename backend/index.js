@@ -1,5 +1,8 @@
 const app = require('express')();
 const consign = require('consign');
+const db = require('./config/db');
+
+app.db = db;
 
 // consign
 // O consign vai ajudar a fazer as dependências dentro da aplicação.
@@ -13,11 +16,13 @@ const consign = require('consign');
 
 consign() // chameia a função.
     .then('./config/middlewares.js') // encadeio.
+    .then('./api/user')
+    .then('./config/routes.js')
     .into(app) // Aqui ele vai usar, injetar cada uma das dependências que ele vai carregar. Ele vai injetar como parâmetro o app que foi criado.
 
-    // Ele sabe o que está sendo carregado pelo caminho informado no then.
-    // O consign vai ser o responsável por passar o app como parâmetro para o arquivo informado no then. Dentro desse arquivo é exportado uma
-    // função e essa função vai ser o app.
-    // E dentro desse arquivo é possível injetar o middlewares da aplicação.
+// Ele sabe o que está sendo carregado pelo caminho informado no then.
+// O consign vai ser o responsável por passar o app como parâmetro para o arquivo informado no then. Dentro desse arquivo é exportado uma
+// função e essa função vai ser o app.
+// E dentro desse arquivo é possível injetar o middlewares da aplicação.
 
 app.listen(3000, () => console.log('Backend executando na porta 3000.'));
