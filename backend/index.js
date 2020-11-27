@@ -16,7 +16,8 @@ app.db = db;
 
 consign() // chameia a função.
     .then('./config/middlewares.js') // encadeio.
-    .then('./api/user')
+    .then('./api/validation.js')
+    .then('./api/user.js')
     .then('./config/routes.js')
     .into(app) // Aqui ele vai usar, injetar cada uma das dependências que ele vai carregar. Ele vai injetar como parâmetro o app que foi criado.
 
@@ -25,4 +26,4 @@ consign() // chameia a função.
 // função e essa função vai ser o app.
 // E dentro desse arquivo é possível injetar o middlewares da aplicação.
 
-app.listen(3000, () => console.log('Backend executando na porta 3000.'));
+app.listen(3010, () => console.log('Backend executando na porta 3010.'));

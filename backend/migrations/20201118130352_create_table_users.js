@@ -1,3 +1,4 @@
+const { default: Axios } = require("axios");
 
 exports.up = function (knex, Promise) {
     return knex.schema.createTable('wm_backend.users', table => {
@@ -13,3 +14,5 @@ exports.up = function (knex, Promise) {
 exports.down = function (knex, Promise) {
     return knex.schema.dropTable('wm_backend.users');
 };
+
+
