@@ -15,9 +15,11 @@ app.db = db;
 // responsável por colocar os métodos, a api tudo dentro de app.
 
 consign() // chameia a função.
+    .then('./config/tbNames.js')
+    .include('./config/passport.js')
     .then('./config/middlewares.js') // encadeio.
     .then('./api/validation.js')
-    .then('./api/user.js')
+    .then('./api')
     .then('./config/routes.js')
     .into(app) // Aqui ele vai usar, injetar cada uma das dependências que ele vai carregar. Ele vai injetar como parâmetro o app que foi criado.
 

@@ -1,6 +1,7 @@
 // Update with your config settings.
 
-require('dotenv').config();
+const env = require('dotenv').config();
+
 module.exports = {
   client: 'pg',
   connection: {
