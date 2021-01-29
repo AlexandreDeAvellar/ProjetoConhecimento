@@ -13,6 +13,9 @@ module.exports = app => {
         const user = await app.db(tb.users)
             .where({ email: req.body.email })
             .first()
+            .catch(e => res.send(e))
+
+
 
         if (!user) return res.status(400).send('Usuário não encontrado!');
 

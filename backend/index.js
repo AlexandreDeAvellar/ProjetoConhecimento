@@ -1,8 +1,12 @@
 const app = require('express')();
 const consign = require('consign');
 const db = require('./config/db');
+const mongoose = require('mongoose');
+
+require('./config/mongodb');
 
 app.db = db;
+app.mongoose = mongoose;
 
 // consign
 // O consign vai ajudar a fazer as dependências dentro da aplicação.
@@ -20,6 +24,7 @@ consign() // chameia a função.
     .then('./config/middlewares.js') // encadeio.
     .then('./api/validation.js')
     .then('./api')
+    .then('./schedule')
     .then('./config/routes.js')
     .into(app) // Aqui ele vai usar, injetar cada uma das dependências que ele vai carregar. Ele vai injetar como parâmetro o app que foi criado.
 

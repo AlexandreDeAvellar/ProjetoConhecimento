@@ -13,6 +13,8 @@ module.exports = app => {
         const user = { ...req.body };
         if (req.params.id) user.id = req.params.id;
 
+        if(!req.originalUrl.startsWith('/users')) user.admin = false;
+        if(!req.user || !req.user.admin) user.admin = false;
 
         try {
             existsOrError(user.name, 'Nome não informado');
@@ -34,6 +36,7 @@ module.exports = app => {
             app.db(tb.users)
                 .update(user)
                 .where({ id: user.id })
+                .whereNull('deletedAt')
                 .then(e => res.status(204).send())
                 .catch(err => res.status(500).send(err));
         } else {
@@ -50,17 +53,36 @@ module.exports = app => {
         await app.db(tb.users)
             .select('admin', 'id', 'email', 'name')
             .where({ id: id })
+            .whereNull('deletedAt')
             .first()
             .then(us => res.status(200).json(us))
             .catch(err => res.status(500).json(err))
     }
 
     const get = async (req, res) => {
-        console.log(tb.users);
-        app.db(tb.users).select('id', 'name', 'email', 'admin')
+        app.db(tb.users).select('id', 'name', 'email', 'admin', 'deletedAt')
+            .whereNull('deletedAt')
             .then(users => res.json(users))
             .catch(err => res.status(500).json(err))
     }
 
-    return { save, get, getById }
+    const remove = async (req, res) => {
+        try {
+            const articles = await app.db(tb.articles)
+                .where({ userId: req.params.id })
+            notExistsOrError(articles, 'Usuário possui artigos.')
+
+            const rowsUpdate = await app.db(tb.users)
+                .update({ deletedAt: new Date() })
+                .where({ id: req.params.id })
+            existsOrError(rowsUpdate, 'Usuário não foi encontrado')
+
+            res.status(204).send()
+
+        } catch (msg) {
+            res.status(400).send(msg)
+        }
+    }
+
+    return { save, get, getById, remove }
 }

@@ -4,14 +4,13 @@ const passportJwt = require('passport-jwt');
 const { Strategy, ExtractJwt } = passportJwt;
 
 module.exports = app => {
-
     const { tb } = app.config.tbNames;
-
+    
     const params = {
         secretOrKey: authSecret,
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
     }
-
+    
     const strategy = new Strategy(params, (payload, done) => {
         app.db(tb.users)
             .where({ id: payload.id })
